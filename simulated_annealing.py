@@ -5,6 +5,7 @@ from jobshopproblem import *
 import math
 import random
 import time
+import numpy
 
 # Función que genera vecinos realizando un swap de las posiciones del array
 # Entrada: state        -> solución actual
@@ -51,7 +52,8 @@ def simulatedAnnealing(jobs, T, termination, halting, mode, decrease):
                     state = n
                     actualCost = nCost
                 else:
-                    probability = math.exp(-nCost/T)
+                    delta = abs(nCost - actualCost)
+                    probability = math.exp(-delta/T)
                     if random.random() < probability:
                         state = n
                         actualCost = nCost
