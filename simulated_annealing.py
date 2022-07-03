@@ -40,7 +40,7 @@ def simulatedAnnealing(jobs, T, termination, halting, mode, decrease):
 
     state = randomSchedule(numberOfJobs, numberOfMachines)
 
-    for i in range(halting):
+    while(T > 1):
         T = decrease * float(T)
 
         for k in range(termination):
