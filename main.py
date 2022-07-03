@@ -17,15 +17,13 @@ if __name__ == '__main__':
 
     # Se utiliza la metaheurística de Simulated Annealing para encontrar una solución de
     # buena calidad que se aporxime al óptimo del problema
-    start_time = time.time()
-    cost, solution = simulatedAnnealing(jobs,  
+    cost, solution, solutions, executionTime = simulatedAnnealing(jobs,  
                                         T=int(200), 
-                                        termination=int(20), 
-                                        halting=int(10), 
+                                        termination=int(10), 
                                         mode='random', 
-                                        decrease=float(0.8))
+                                        decrease=float(0.8),
+                                        printSolutions=True)
 
-    end_time = time.time()
     print("La solución optima encontrada es:")
     print(cost, solution)
     
@@ -33,11 +31,10 @@ if __name__ == '__main__':
     #printSchedule(jobs, solution)
 
     # Se imprime el tiempo de ejecución
-    print("La búsqueda demoró {:.1f} segundos".format(end_time - start_time))
+    print("La búsqueda demoró {:.1f} segundos".format(executionTime))
 
     ############################################################################################
-    start_time = time.time()
-    cost, solution = simulatedAnnealingImproved(jobs,
+    cost, solution, executionTime = simulatedAnnealingImproved(jobs,
                                                 numExperiments=40,  
                                                 T=int(200), 
                                                 termination=int(20), 
@@ -45,7 +42,6 @@ if __name__ == '__main__':
                                                 mode='random', 
                                                 decrease=float(0.8))
 
-    end_time = time.time()
     print("\n\nLa solución optima encontrada es:")
-    print(cost,solution)
-    print("La búsqueda mejorada demoró {:.1f} segundos".format(end_time - start_time))
+    print(cost, solution)
+    print("La búsqueda mejorada demoró {:.1f} segundos".format(executionTime))

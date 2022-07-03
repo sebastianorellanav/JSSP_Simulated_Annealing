@@ -6,6 +6,7 @@ import math
 import random
 import time
 import numpy
+import matplotlib.pyplot as plt
 
 # Función que genera vecinos realizando un swap de las posiciones del array
 # Entrada: state        -> solución actual
@@ -34,11 +35,14 @@ def getNeigbors(state, mode="normal"):
 #          decrease    -> porcentaje de disminución de la temperatura
 # Salida:  actualCost  -> makespan de la solución encontrada
 #          state       -> solución encontrada 
-def simulatedAnnealing(jobs, T, termination, halting, mode, decrease):
+def simulatedAnnealing(jobs, T, termination, mode, decrease, printSolutions = False):
     numberOfJobs = len(jobs)
     numberOfMachines = len(jobs[0])
 
+    execution = time.time()
     state = randomSchedule(numberOfJobs, numberOfMachines)
+
+    solutionsCosts = [] 
 
     while(T > 1):
         T = decrease * float(T)
@@ -57,18 +61,35 @@ def simulatedAnnealing(jobs, T, termination, halting, mode, decrease):
                     if random.random() < probability:
                         state = n
                         actualCost = nCost
+                solutionsCosts.append(actualCost)
+    execution = time.time() - execution
+    if printSolutions == True:
+        printSearch(solutionsCosts, "Búsqueda de Soluciones con SA")
 
-    return actualCost, state
+    return actualCost, state, solutionsCosts, execution
 
 def simulatedAnnealingImproved(jobs, numExperiments, T, termination, halting, mode, decrease):
     solutions = []
     best = 10000000
-
+    solutionsCosts = []
+    execution = time.time()
     for i in range(numExperiments):
-        cost, schedule = simulatedAnnealing(jobs, T=T, termination=termination, halting=halting, mode=mode, decrease=decrease)
-
+        cost, schedule, solutionsCost, e = simulatedAnnealing(jobs, T=T, termination=termination, mode=mode, decrease=decrease, printSolutions=False)
+        solutionsCosts = solutionsCosts + solutionsCost
         if cost < best:
             best = cost
             solutions.append((cost, schedule))
-    
-    return solutions[-1]
+    execution = time.time() - execution      
+    printSearch(solutionsCosts, "Búsqueda de Soluciones con SA improved")
+    print(solutions[-1])
+    return solutions[-1][0], solutions[-1][1], execution
+
+
+def printSearch(solutionsCosts, title):
+    x = range(len(solutionsCosts))
+
+    plt.plot(x, solutionsCosts)
+    plt.xlabel('Iteraciones')
+    plt.ylabel('Makespan (Función Objetivo)')
+    plt.title(title)
+    plt.show()
